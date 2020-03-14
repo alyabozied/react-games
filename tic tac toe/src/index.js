@@ -65,6 +65,7 @@ function Board() {
       ) {
         setWinner(board[i]);
         console.log(board[i]);
+        return;
       }
     }
     //coloumns
@@ -73,22 +74,36 @@ function Board() {
         board[i] === board[i + 3] &&
         board[i] === board[i + 6] &&
         (board[i] === "X" || board[i] === "O")
-      )
+      ) {
         setWinner(board[i]);
+        return;
+      }
     }
     //diagonals
     if (
       board[0] === board[4] &&
       board[0] === board[8] &&
       (board[0] === "X" || board[0] === "O")
-    )
+    ) {
       setWinner(board[0]);
+      return;
+    }
     if (
       board[2] === board[4] &&
       board[2] === board[6] &&
       (board[2] === "X" || board[2] === "O")
-    )
+    ) {
       setWinner(board[2]);
+      return;
+    }
+    if (
+      !board.find(Element => {
+        return Element === " ";
+      })
+    ) {
+      setWinner("Draw");
+      return;
+    }
   }
   function clear() {
     setWinner(" ");
@@ -96,10 +111,23 @@ function Board() {
     setBoard(Array(9).fill(" "));
   }
   let printWinner;
-  if (winner !== " ") {
+  if (winner !== " " && winner !== "Draw") {
     printWinner = (
       <div>
         <div>player {winner} won</div>
+        <button
+          onClick={() => {
+            clear();
+          }}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  } else if (winner === "Draw") {
+    printWinner = (
+      <div>
+        <div>Draw</div>
         <button
           onClick={() => {
             clear();
